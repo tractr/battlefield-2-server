@@ -70,6 +70,9 @@ services:
       - ENV_SERVER_NAME=bf2-docker #1
       - ENV_MAX_PLAYERS=16
       - ENV_SERVER_PORT=16567
+      - ENV_SERVER_INTERNET=0
+      - ENV_SERVER_IP="0.0.0.0"
+      - ENV_SERVER_MOTD="Welcome to bf2-docker"
       - ENV_GAMESPY_PORT=29900
       - ENV_DEMOS_URL=http://www.example.com:8000/
       - ENV_RCON_PASSWORD=rconpw123
@@ -92,6 +95,9 @@ services:
       - ENV_SERVER_NAME=bf2-docker #2
       - ENV_MAX_PLAYERS=4
       - ENV_SERVER_PORT=16569
+      - ENV_SERVER_INTERNET=0
+      - ENV_SERVER_IP="0.0.0.0"
+      - ENV_SERVER_MOTD="Welcome to bf2-docker"
       - ENV_GAMESPY_PORT=29901
       - ENV_DEMOS_URL=http://www.example.com:8001/
       - ENV_RCON_PASSWORD=rconpw123
@@ -117,3 +123,13 @@ First set up Docker Desktop on Windows (WSL2).
 Download the assets (see assets.txt) and put them in the images/\*/assets/ folder so you don't need to redownload them on each build. Then make your changes in Dockerfile, build.sh, setup.sh and run.sh. Build and run with `.\build.bat`. Make sure Docker is set to use Linux containers.
 
 Contributions to new or existing images are welcome if you want them public.
+
+## Build the images
+
+```shell
+docker image build -t tractr/battlefield-2-server:latest ./images/default
+docker image build -t tractr/battlefield-2-server:default ./images/default
+docker image build -t tractr/battlefield-2-server:bf2hub-pb-mm ./images/bf2hub-pb-mm
+docker image build -t tractr/battlefield-2-server:bf2hub-pb-mm-bf2cc ./images/bf2hub-pb-mm-bf2cc
+docker image build -t tractr/battlefield-2-server:bf2hub-pb-mm-webadmin ./images/bf2hub-pb-mm-webadmin
+```

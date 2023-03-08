@@ -1,9 +1,9 @@
 sv.serverName "{{server_name}}"
 sv.password ""
-sv.internet 1
-sv.serverIP "0.0.0.0"
+sv.internet {{server_internet}}
+sv.serverIP "{{server_ip}}"
 sv.serverPort {{server_port}}
-sv.welcomeMessage ""
+sv.welcomeMessage "{{server_motd}}"
 sv.punkBuster 1
 sv.allowFreeCam 1
 sv.allowExternalViews 1
@@ -18,8 +18,8 @@ sv.spawnTime 15
 sv.manDownTime 15
 sv.endOfRoundDelay 15
 sv.ticketRatio 100
-sv.roundsPerMap 3
-sv.timeLimit 0
+sv.roundsPerMap 1
+sv.timeLimit 25
 sv.scoreLimit 0
 sv.soldierFriendlyFire 100
 sv.vehicleFriendlyFire 100

@@ -2,12 +2,12 @@
 <Profile>
   <ServerInfo>
     <ServerInfoID>1</ServerInfoID>
-    <GameIP>0.0.0.0</GameIP>
+    <GameIP>{{server_ip}}</GameIP>
     <GamePort>{{server_port}}</GamePort>
     <GamespyPort>{{gamespy_port}}</GamespyPort>
     <RCONIP>0.0.0.0</RCONIP>
     <RCONPort>4711</RCONPort>
-    <IsInternet>true</IsInternet>
+    <IsInternet>{{server_internet}}</IsInternet>
     <AllowNATNegotiate>false</AllowNATNegotiate>
     <PunkbusterEnabled>true</PunkbusterEnabled>
     <RCONPassword>{{rcon_password}}</RCONPassword>
