@@ -117,15 +117,9 @@ services:
 
 Place the docker-compose.yml on the host and run `docker-compose up -d --remove-orphans` to create the containers. If you are not using a container registry then the images need to be built on the host first.
 
-## Custom maps list
+## Maps list
 
-Override the default `maplist.con` with a custom one by mounting it to `/home/bf2/srv/mods/bf2/settings/maplist.con` in the container.
-
-The default `maplist.con` is:
-
-```text
-mapList.append strike_at_karkand gpm_cq 32
-```
+The `maplist.con` is `images/default/assets/build/bf2/mods/bf2/settings/maplist.con`.
 
 ## Development
 

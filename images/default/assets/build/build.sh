@@ -32,6 +32,8 @@ rm -r $TMP/srv/bin/ia-32
 # Replace with our own BF2 server files (custom settings and scripts)
 cp -r "$TMP/bf2/." "$TMP/srv"
 
+
+
 # Create empty server folder to copy our files into if it's empty on the host system
 mkdir -p $VOLUME
 chmod -R 700 $VOLUME/
