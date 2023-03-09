@@ -9,7 +9,7 @@ Dockerized Battlefield 2 server based on [insanity54/bf42-dock](https://github.c
 
 ## Usage
 
-Different server variations are placed in the [images](https://github.com/nihlen/bf2-docker/tree/master/images) folder. To create your own, you can copy one of the existing images to use as a base, and then place your custom files in the assets/bf2 folder to overwrite any existing files.
+Different server variations are placed in the [images](https://github.com/tractr/battlefield-2-server/tree/master/images) folder. To create your own, you can copy one of the existing images to use as a base, and then place your custom files in the assets/bf2 folder to overwrite any existing files.
 
 Initial settings or passwords can be set using environment variables. Persisted files like settings, logs and demos are put in the `/volume` directory in the container using symbolic links and should be mapped to a host directory. If you want to have full visibility of the server files you can also map the `/home/bf2/srv` folder of the container.
 
@@ -17,18 +17,18 @@ To use these images on a remote host like a VPS you can either use the snippets 
 
 Running multiple servers on the same host can be done by changing the ports in the environment variables and the mapped host port. For this use case I prefer using Docker Compose, an example is listed further down.
 
-### [default](https://github.com/nihlen/bf2-docker/tree/master/images/default)
+### [default](https://github.com/tractr/battlefield-2-server/tree/master/images/default)
 
 - Battlefield 2 server (1.5.3153.0)
 
 The basic image to run a Battlefield 2 server. Not practical since you can't play online but it can be used as a base.
 
 ```
-docker build -t nihlen/bf2-docker/default https://github.com/nihlen/bf2-docker.git#master:images/default
-docker run --name bf2server -v <host directory>:/volume -p 4711:4711/tcp -p 4712:4712/tcp -p 16567:16567/udp -p 27901:27901/udp -p 29900:29900/udp nihlen/bf2-docker/default:latest
+docker build -t tractr/battlefield-2-server:default ./images/default
+docker run --name bf2server -v <host directory>:/volume -p 4711:4711/tcp -p 4712:4712/tcp -p 16567:16567/udp -p 27901:27901/udp -p 29900:29900/udp tractr/battlefield-2-server:default
 ```
 
-### [bf2hub-pb-mm](https://github.com/nihlen/bf2-docker/tree/master/images/bf2hub-pb-mm)
+### [bf2hub-pb-mm](https://github.com/tractr/battlefield-2-server/tree/master/images/bf2hub-pb-mm)
 
 - BF2Hub Unranked (R3)
 - Updated PunkBuster
@@ -38,19 +38,19 @@ docker run --name bf2server -v <host directory>:/volume -p 4711:4711/tcp -p 4712
 Uses BF2Hub to play online. The RCON password is set using environment variable `ENV_RCON_PASSWORD`. If you want to persist the demos on the host you can use `-v <host directory>:/var/www/html/demos` and use `-e ENV_DEMOS_URL='<host address>'` to provide demo urls after finished rounds.
 
 ```
-docker build -t nihlen/bf2-docker/bf2hub-pb-mm https://github.com/nihlen/bf2-docker.git#master:images/bf2hub-pb-mm
-docker run --name bf2server -v <host directory>:/volume -e ENV_RCON_PASSWORD='rconpw123' -e ENV_DEMOS_URL='http://www.example.com:80/' -p 80:80/tcp -p 4711:4711/tcp -p 4712:4712/tcp -p 16567:16567/udp -p 27901:27901/udp -p 29900:29900/udp nihlen/bf2-docker/bf2hub-pb-mm:latest
+docker build -t tractr/battlefield-2-server:bf2hub-pb-mm ./images/bf2hub-pb-mm
+docker run --name bf2server -v <host directory>:/volume -e ENV_RCON_PASSWORD='rconpw123' -e ENV_DEMOS_URL='http://www.example.com:80/' -p 80:80/tcp -p 4711:4711/tcp -p 4712:4712/tcp -p 16567:16567/udp -p 27901:27901/udp -p 29900:29900/udp tractr/battlefield-2-server:bf2hub-pb-mm
 ```
 
-### [bf2hub-pb-mm-bf2cc](https://github.com/nihlen/bf2-docker/tree/master/images/bf2hub-pb-mm-bf2cc)
+### [bf2hub-pb-mm-bf2cc](https://github.com/tractr/battlefield-2-server/tree/master/images/bf2hub-pb-mm-bf2cc)
 
 - BF2CC Daemon (1.4.2446)
 
 Runs with bf2ccd.exe using Mono. The RCON and BF2CC Daemon passwords are set using environment variables `ENV_RCON_PASSWORD` and `ENV_BF2CCD_PASSWORD`.
 
 ```
-docker build -t nihlen/bf2-docker/bf2hub-pb-mm-bf2cc https://github.com/nihlen/bf2-docker.git#master:images/bf2hub-pb-mm-bf2cc
-docker run --name bf2server -it -v <host directory>:/volume -e ENV_RCON_PASSWORD='rconpw123' -e ENV_BF2CCD_PASSWORD='bf2ccdpw123' -e ENV_DEMOS_URL='http://www.example.com:80/' -p 80:80/tcp -p 4711:4711/tcp -p 4712:4712/tcp -p 16567:16567/udp -p 27901:27901/udp -p 29900:29900/udp nihlen/bf2-docker/bf2hub-pb-mm-bf2cc:latest
+docker build -t tractr/battlefield-2-server:bf2hub-pb-mm-bf2cc ./images/bf2hub-pb-mm-bf2cc
+docker run --name bf2server -it -v <host directory>:/volume -e ENV_RCON_PASSWORD='rconpw123' -e ENV_BF2CCD_PASSWORD='bf2ccdpw123' -e ENV_DEMOS_URL='http://www.example.com:80/' -p 80:80/tcp -p 4711:4711/tcp -p 4712:4712/tcp -p 16567:16567/udp -p 27901:27901/udp -p 29900:29900/udp tractr/battlefield-2-server:bf2hub-pb-mm-bf2cc
 ```
 
 ### Docker Compose
@@ -64,7 +64,7 @@ version: "3.3"
 services:
   bf2-docker-1-service:
     container_name: bf2-docker-1
-    image: nihlen/bf2-docker/bf2hub-pb-mm
+    image: tractr/battlefield-2-server:bf2hub-pb-mm
     restart: on-failure
     environment:
       - ENV_SERVER_NAME=bf2-docker #1
@@ -79,6 +79,7 @@ services:
     volumes:
       - "/data/bf2/bf2-docker-1/server:/home/bf2/srv"
       - "/data/bf2/bf2-docker-1/volume:/volume"
+      - "./maplist.con:/home/bf2/srv/mods/bf2/settings/maplist.con"
     ports:
       - "8000:80/tcp"
       - "4711:4711/tcp"
@@ -89,7 +90,7 @@ services:
 
   bf2-docker-2-service:
     container_name: bf2-docker-2
-    image: nihlen/bf2-docker/bf2hub-pb-mm-bf2cc
+    image: tractr/battlefield-2-server:bf2hub-pb-mm-bf2cc
     restart: on-failure
     environment:
       - ENV_SERVER_NAME=bf2-docker #2
@@ -115,6 +116,16 @@ services:
 ```
 
 Place the docker-compose.yml on the host and run `docker-compose up -d --remove-orphans` to create the containers. If you are not using a container registry then the images need to be built on the host first.
+
+## Custom maps list
+
+Override the default `maplist.con` with a custom one by mounting it to `/home/bf2/srv/mods/bf2/settings/maplist.con` in the container.
+
+The default `maplist.con` is:
+
+```text
+mapList.append strike_at_karkand gpm_cq 32
+```
 
 ## Development
 
