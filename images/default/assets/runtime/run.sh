@@ -50,6 +50,6 @@ fi
 # Start Battlefield 2 server as the bf2 user
 echo "Starting Battlefield 2 server..."
 export TERM=xterm
-su -c "cd $SRV && ./start.sh >bf2.log" - bf2
+su -c "cd $SRV && ./start.sh" - bf2
 
 exit 0

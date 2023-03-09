@@ -81,6 +81,6 @@ service php7.0-fpm start
 # Start Battlefield 2 server as the bf2 user
 echo "Starting Battlefield 2 server..."
 export TERM=xterm
-su -c "cd $SRV && ./start_bf2hub.sh >bf2.log" - bf2
+su -c "cd $SRV && ./start_bf2hub.sh" - bf2
 
 exit 0

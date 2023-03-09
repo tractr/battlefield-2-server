@@ -25,7 +25,7 @@ The basic image to run a Battlefield 2 server. Not practical since you can't pla
 
 ```
 docker build -t tractr/battlefield-2-server:default ./images/default
-docker run --name bf2server -v <host directory>:/volume -p 4711:4711/tcp -p 4712:4712/tcp -p 16567:16567/udp -p 27901:27901/udp -p 29900:29900/udp tractr/battlefield-2-server:default
+docker run --name bf2server -p 4711:4711/tcp -p 4712:4712/tcp -p 16567:16567/udp -p 27901:27901/udp -p 29900:29900/udp tractr/battlefield-2-server:default
 ```
 
 ### [bf2hub-pb-mm](https://github.com/tractr/battlefield-2-server/tree/master/images/bf2hub-pb-mm)
