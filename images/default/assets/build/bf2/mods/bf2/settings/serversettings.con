@@ -17,9 +17,9 @@ sv.endDelay 15
 sv.spawnTime 15
 sv.manDownTime 15
 sv.endOfRoundDelay 15
-sv.ticketRatio 100
+sv.ticketRatio 200
 sv.roundsPerMap 1
-sv.timeLimit 25
+sv.timeLimit 30
 sv.scoreLimit 0
 sv.soldierFriendlyFire 100
 sv.vehicleFriendlyFire 100
@@ -62,7 +62,7 @@ sv.radioMaxSpamFlagCount 6
 sv.radioBlockedDurationTime 30
 sv.numReservedSlots 0
 sv.friendlyFireWithMines 0
-sv.coopBotCount 32
-sv.coopBotDifficulty 50
+sv.coopBotCount {{coop_bot_count}}
+sv.coopBotDifficulty {{coop_bot_difficulty}}
 sv.coopBotRatio 50
 sv.noVehicles 0

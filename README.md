@@ -1,6 +1,6 @@
 # bf2-docker
 
-Dockerized Battlefield 2 server based on [insanity54/bf42-dock](https://github.com/insanity54/bf42-dock). The base image is `debian:stretch-slim` and was tested on Linux containers in Windows 10 WSL2 and Debian 11. Uses multi-stage builds to keep the image sizes down.
+Dockerized Battlefield 2 server based on [nihlen/bf2-docker](https://github.com/nihlen/bf2-docker). The base image is `debian:stretch-slim` and was tested on Linux containers in Windows 10 WSL2 and Debian 11. Uses multi-stage builds to keep the image sizes down.
 
 ## Prerequisites
 
@@ -28,31 +28,6 @@ docker build -t tractr/battlefield-2-server:default ./images/default
 docker run --name bf2server -p 4711:4711/tcp -p 4712:4712/tcp -p 16567:16567/udp -p 27901:27901/udp -p 29900:29900/udp tractr/battlefield-2-server:default
 ```
 
-### [bf2hub-pb-mm](https://github.com/tractr/battlefield-2-server/tree/master/images/bf2hub-pb-mm)
-
-- BF2Hub Unranked (R3)
-- Updated PunkBuster
-- ModManager (2.2c)
-- Automatic demo hosting (nginx)
-
-Uses BF2Hub to play online. The RCON password is set using environment variable `ENV_RCON_PASSWORD`. If you want to persist the demos on the host you can use `-v <host directory>:/var/www/html/demos` and use `-e ENV_DEMOS_URL='<host address>'` to provide demo urls after finished rounds.
-
-```
-docker build -t tractr/battlefield-2-server:bf2hub-pb-mm ./images/bf2hub-pb-mm
-docker run --name bf2server -v <host directory>:/volume -e ENV_RCON_PASSWORD='rconpw123' -e ENV_DEMOS_URL='http://www.example.com:80/' -p 80:80/tcp -p 4711:4711/tcp -p 4712:4712/tcp -p 16567:16567/udp -p 27901:27901/udp -p 29900:29900/udp tractr/battlefield-2-server:bf2hub-pb-mm
-```
-
-### [bf2hub-pb-mm-bf2cc](https://github.com/tractr/battlefield-2-server/tree/master/images/bf2hub-pb-mm-bf2cc)
-
-- BF2CC Daemon (1.4.2446)
-
-Runs with bf2ccd.exe using Mono. The RCON and BF2CC Daemon passwords are set using environment variables `ENV_RCON_PASSWORD` and `ENV_BF2CCD_PASSWORD`.
-
-```
-docker build -t tractr/battlefield-2-server:bf2hub-pb-mm-bf2cc ./images/bf2hub-pb-mm-bf2cc
-docker run --name bf2server -it -v <host directory>:/volume -e ENV_RCON_PASSWORD='rconpw123' -e ENV_BF2CCD_PASSWORD='bf2ccdpw123' -e ENV_DEMOS_URL='http://www.example.com:80/' -p 80:80/tcp -p 4711:4711/tcp -p 4712:4712/tcp -p 16567:16567/udp -p 27901:27901/udp -p 29900:29900/udp tractr/battlefield-2-server:bf2hub-pb-mm-bf2cc
-```
-
 ### Docker Compose
 
 To simplify setting up multiple servers on the same host you can use Docker Compose. The `image:` property can point to a locally built image or a URL to your container registry of choice. Note that the game server port and gamespy port need to match in the environment variables and in the Docker port configuration.
@@ -64,22 +39,22 @@ version: "3.3"
 services:
   bf2-docker-1-service:
     container_name: bf2-docker-1
-    image: tractr/battlefield-2-server:bf2hub-pb-mm
+    image: tractr/battlefield-2-server:default
     restart: on-failure
     environment:
       - ENV_SERVER_NAME=bf2-docker #1
-      - ENV_MAX_PLAYERS=16
+      - ENV_MAX_PLAYERS=32
+      - ENV_COOP_BOT_COUNT=32
+      - ENV_COOP_BOT_DIFFICULTY=50
       - ENV_SERVER_PORT=16567
       - ENV_SERVER_INTERNET=0
       - ENV_SERVER_IP="0.0.0.0"
       - ENV_SERVER_MOTD="Welcome to bf2-docker"
       - ENV_GAMESPY_PORT=29900
-      - ENV_DEMOS_URL=http://www.example.com:8000/
       - ENV_RCON_PASSWORD=rconpw123
     volumes:
       - "/data/bf2/bf2-docker-1/server:/home/bf2/srv"
       - "/data/bf2/bf2-docker-1/volume:/volume"
-      - "./maplist.con:/home/bf2/srv/mods/bf2/settings/maplist.con"
     ports:
       - "8000:80/tcp"
       - "4711:4711/tcp"
@@ -87,32 +62,6 @@ services:
       - "16567:16567/udp"
       - "27901:27901/udp"
       - "29900:29900/udp"
-
-  bf2-docker-2-service:
-    container_name: bf2-docker-2
-    image: tractr/battlefield-2-server:bf2hub-pb-mm-bf2cc
-    restart: on-failure
-    environment:
-      - ENV_SERVER_NAME=bf2-docker #2
-      - ENV_MAX_PLAYERS=4
-      - ENV_SERVER_PORT=16569
-      - ENV_SERVER_INTERNET=0
-      - ENV_SERVER_IP="0.0.0.0"
-      - ENV_SERVER_MOTD="Welcome to bf2-docker"
-      - ENV_GAMESPY_PORT=29901
-      - ENV_DEMOS_URL=http://www.example.com:8001/
-      - ENV_RCON_PASSWORD=rconpw123
-      - ENV_BF2CCD_PASSWORD=bf2ccdpw123
-    volumes:
-      - "/data/bf2/bf2-docker-2/server:/home/bf2/srv"
-      - "/data/bf2/bf2-docker-2/volume:/volume"
-    ports:
-      - "8001:80/tcp"
-      - "4721:4711/tcp"
-      - "4722:4712/tcp"
-      - "16569:16569/udp"
-      - "27911:27901/udp"
-      - "29901:29901/udp"
 ```
 
 Place the docker-compose.yml on the host and run `docker-compose up -d --remove-orphans` to create the containers. If you are not using a container registry then the images need to be built on the host first.
@@ -121,20 +70,9 @@ Place the docker-compose.yml on the host and run `docker-compose up -d --remove-
 
 The `maplist.con` is `images/default/assets/build/bf2/mods/bf2/settings/maplist.con`.
 
-## Development
-
-First set up Docker Desktop on Windows (WSL2).
-
-Download the assets (see assets.txt) and put them in the images/\*/assets/ folder so you don't need to redownload them on each build. Then make your changes in Dockerfile, build.sh, setup.sh and run.sh. Build and run with `.\build.bat`. Make sure Docker is set to use Linux containers.
-
-Contributions to new or existing images are welcome if you want them public.
-
 ## Build the images
 
 ```shell
 docker image build -t tractr/battlefield-2-server:latest ./images/default
 docker image build -t tractr/battlefield-2-server:default ./images/default
-docker image build -t tractr/battlefield-2-server:bf2hub-pb-mm ./images/bf2hub-pb-mm
-docker image build -t tractr/battlefield-2-server:bf2hub-pb-mm-bf2cc ./images/bf2hub-pb-mm-bf2cc
-docker image build -t tractr/battlefield-2-server:bf2hub-pb-mm-webadmin ./images/bf2hub-pb-mm-webadmin
 ```

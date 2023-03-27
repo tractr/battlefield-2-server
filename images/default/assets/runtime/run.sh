@@ -39,7 +39,9 @@ else
 
     # Set server settings from environment variables
     replace_var '{{server_name}}' "${ENV_SERVER_NAME:-"bf2-docker"}" "$SRV/mods/bf2/settings/serversettings.con"
-    replace_var '{{max_players}}' "${ENV_MAX_PLAYERS:-"16"}" "$SRV/mods/bf2/settings/serversettings.con"
+    replace_var '{{max_players}}' "${ENV_MAX_PLAYERS:-"32"}" "$SRV/mods/bf2/settings/serversettings.con"
+    replace_var '{{coop_bot_count}}' "${ENV_COOP_BOT_COUNT:-"32"}" "$SRV/mods/bf2/settings/serversettings.con"
+    replace_var '{{coop_bot_difficulty}}' "${ENV_COOP_BOT_DIFFICULTY:-"50"}" "$SRV/mods/bf2/settings/serversettings.con"
     replace_var '{{server_port}}' "${ENV_SERVER_PORT:-"16567"}" "$SRV/mods/bf2/settings/serversettings.con"
     replace_var '{{server_internet}}' "${ENV_SERVER_INTERNET:-"0"}" "$SRV/mods/bf2/settings/serversettings.con"
     replace_var '{{server_ip}}' "${ENV_SERVER_IP:-"0.0.0.0"}" "$SRV/mods/bf2/settings/serversettings.con"
